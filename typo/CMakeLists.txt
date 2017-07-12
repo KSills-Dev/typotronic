@@ -1,7 +1,14 @@
-set(HEADERS)
+set(HEADERS
+    util.hpp
+    costs.hpp
+    layout.hpp
+    typo.hpp)
 
 set(SOURCES
-    main.cpp)
+    main.cpp
+    util.cpp
+    costs.cpp
+    layout.cpp)
 
 add_executable(typo ${HEADERS} ${SOURCES})
 
