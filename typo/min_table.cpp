@@ -2,8 +2,10 @@
 
 auto MinTable::MinTable(const std::string &target, const std::string &actual)
     : _target(target), _actual(actual) {
-  static_assert(false, "NOT IMPLEMENTED");
+  _data = new MinNode[target.size() * actual.size()];
 }
+
+auto MinTable::~MinTable() { delete _data; }
 
 auto MinTable::fill() -> void {
   // Fill table with insert, sub, and delete operations.
