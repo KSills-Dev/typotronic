@@ -17,6 +17,7 @@ class MinTable {
   ~MinTable();
 
   auto fill() -> void;
+
   auto traverse() const -> std::vector<Typo>;
 
 private:
