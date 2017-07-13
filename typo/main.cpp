@@ -97,8 +97,6 @@
 //   return do_stuff("\0" + correct, "\0" + actual + '\0');
 // }
 
-#include "temp.hpp"
-
 auto main(const int argc, const char **argv) -> int {
   std::cout << "Still just a stub!\n";
   std::cout << "But now I compile!\n";
