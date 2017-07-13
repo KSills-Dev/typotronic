@@ -41,3 +41,16 @@ auto find_tranpose(TransposeList &data, const std::string &correct,
     }
   }
 }
+
+auto find_typos(const TypoTable &table, const TransposeList &transposes,
+                const std::string &correct, const std::string &actual,
+                const int i, const int j) -> TypoStack {
+  static_assert(false, "FIND_TYPOS NOT IMPLEMENTED.");
+};
+
+auto find_typos(const TransposeList &transposes, const std::string &correct,
+                const std::string &actual) -> TypoStack {
+  TypoTable data{correct.size() * actual.size()};
+  return find_typos(data, transposes, correct, actual, correct.size() - 1,
+                    actual.size() - 1);
+}

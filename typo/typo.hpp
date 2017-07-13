@@ -17,6 +17,7 @@ struct Typo {
 };
 
 using TypoStack = std::vector<Typo>;
+using TypoTable = std::vector<Typo>;
 
 static const int max_tranpose_distance = 12;
 
@@ -25,3 +26,6 @@ using TransposeList =
 
 auto find_tranpose(TransposeList &data, const std::string &correct,
                    const std::string &actual) -> void;
+
+auto find_typos(const TransposeList &transposes, const std::string &correct,
+                const std::string &actual) -> TypoStack;
