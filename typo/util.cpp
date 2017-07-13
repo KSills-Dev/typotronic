@@ -1,4 +1,5 @@
 #include "util.hpp"
+#include <cstddef>
 
 auto min(std::vector<int> values) -> int {
   auto min = values[0];
