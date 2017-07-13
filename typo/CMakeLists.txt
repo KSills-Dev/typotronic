@@ -8,7 +8,8 @@ set(SOURCES
     main.cpp
     util.cpp
     costs.cpp
-    layout.cpp)
+    layout.cpp
+    typo.cpp)
 
 add_executable(typo ${HEADERS} ${SOURCES})
 
