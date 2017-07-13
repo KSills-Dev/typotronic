@@ -1,0 +1,28 @@
+#+OPTIONS: toc:nil
+#+TITLE:Project 2 Report
+#+AUTHOR:Kenneth Sills, Kevin Orr, Elijah Malaby
+#+LaTeX_HEADER: \usepackage[margin=0.5in]{geometry}
+#+LaTeX_HEADER: \usepackage[boxed]{algorithm2e}
+#+LaTeX_HEADER: \usepackage{mathtools}
+#+LaTeX_HEADER: \DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+
+* Breaking Down Problems
+* Parameters for the recursion
+The two arrays $p$ and $t$ (pattern and typo) and indexes $i$ and $j$ representing
+the positions in $p$ and $t$ currently being compared
+* What recurrence can you use
+
+* What are the base cases
+Whenever $i$ or $j$ are equal to 1. If $i = 1$, the remaining characters in $t[1..j-1]$
+were trivially all insertions at the beginning. If $j = 1$, the remaining characters
+in $i[1..i-1]$ were deleted. If both $i = 1$ and $j = 1$, there are no further characters
+to compare.
+* What data structure would you use
+A map from pairs of $(i, j)$ to the cost of the recurrence for $(i, j)$.
+* Pseudocode for a memoized dynamic programming solution
+* Worst case time complexity
+$O(mn)$
+* Pseudocode for nested loop
+* Can the space complexity of the iterative algorithm be improved relative to the memoized algorithm
+* Describe one advantage and disadvantage of the iterative algorithm
+
