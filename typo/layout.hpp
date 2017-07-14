@@ -2,6 +2,8 @@
 
 #include "util.hpp"
 
+static const char sentinel = '\t';
+
 /**
  @brief
  */

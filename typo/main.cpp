@@ -101,8 +101,8 @@ auto main(const int argc, const char **argv) -> int {
   std::cout << "Still just a stub!\n";
   std::cout << "But now I compile!\n";
 
-  const std::string correct = "The rain in spain ";
-  const std::string actual = "Teh driafna i pasin ";
+  const std::string correct = "rain";
+  const std::string actual = "ran";
   TransposeList result{};
   find_tranpose(result, correct, actual);
 
@@ -116,4 +116,6 @@ auto main(const int argc, const char **argv) -> int {
     }
     std::cout << std::endl;
   }
+
+  find_typos(result, correct, actual);
 }
