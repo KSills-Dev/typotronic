@@ -16,17 +16,19 @@ auto compute_insert_cost(const char left, const char curr, const char right)
   if (curr == ' ') {
     if (place_left.row == 3) {
       return cost::insert_space_ab;
+    } else {
+      return cost::insert_space_ae;
     }
   }
 
-  if (left != ' ' && left != '\0' &&
+  if (left != ' ' && left != sentinel &&
       hand_for_char(place_left) == hand_for_char(place_curr)) {
     minv = min({minv, distance(place_left, place_curr)});
   } else {
     minv = min({minv, cost::insert_char_oh});
   }
 
-  if (right != ' ' && right != '\0' &&
+  if (right != ' ' && right != sentinel &&
       hand_for_char(place_right) == hand_for_char(place_curr)) {
     minv = min({minv, distance(place_right, place_curr)});
   } else {
@@ -44,7 +46,7 @@ auto compute_delete_cost(const char left, const char curr) -> int {
   if (curr == ' ') {
     return cost::delete_space;
   }
-  if (left == '\0' || left == ' ') {
+  if (left == sentinel || left == ' ') {
     return cost::delete_char_fc;
   }
 

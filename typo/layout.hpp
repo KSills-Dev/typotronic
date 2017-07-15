@@ -2,6 +2,8 @@
 
 #include "util.hpp"
 
+static const char sentinel = '\t';
+
 /**
  @brief
  */
@@ -45,4 +47,3 @@ auto hand_for_char(const Coord place) -> Hand;
 auto finger_for_char(const Coord place) -> Finger;
 
 auto distance(const Coord lhs, const Coord rhs) -> int;
-}

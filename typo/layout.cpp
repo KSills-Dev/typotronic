@@ -1,4 +1,5 @@
 #include "layout.hpp"
+#include <cstddef>
 
 /**
  @brief
@@ -28,7 +29,7 @@ auto finger_for_char(const Coord place) -> Finger {
   if (col / 5 == 1) {
     col = col * -1 + 9;
   }
-  col = (col == 5) ? 4 : col;
+  col = (col == 4) ? 3 : col;
   return static_cast<Finger>(col);
 }
 

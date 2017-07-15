@@ -15,3 +15,5 @@ And to run:
 ```
 ./build/typo/typo
 ```
+
+**Build Mode** can be changed by passing CMake the `-DCMAKE_BUILD_TYPE=[RELEASE|DEBUG]` flag.
