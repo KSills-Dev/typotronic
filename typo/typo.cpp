@@ -7,8 +7,8 @@
 
 auto find_tranpose(TransposeList &data, const std::string &correct,
                    const std::string &actual) -> void {
-  for (auto i = correct.size() - 1; i > 0; --i) {
-    for (auto j = correct.size() - 1; j > 1; --j) {
+  for (auto i = correct.size() - 1; i > 1; --i) {
+    for (auto j = correct.size() - 1; j > 0; --j) {
       const auto corr = correct[i];
       const auto curr = actual[j];
       const auto left = actual[j - 1];
@@ -67,17 +67,6 @@ auto fill_table(TypoTable &table, const TransposeList &transposes,
   const auto col = (actual.size() - 1);
   const auto row = 1;
   const auto place = i * col + j * row;
-
-  if (place > (correct.size() * col - 1)) {
-    std::cout << "FAIL:\n";
-    std::cout << place << std::endl;
-    std::cout << i << std::endl;
-    std::cout << j << std::endl << std::endl;
-  }
-  if (j < 0) {
-#include <stdlib.h>
-    exit(0);
-  }
 
   if (table[place].parent != -1) {
     // Entry already made
@@ -138,11 +127,11 @@ auto fill_table(TypoTable &table, const TransposeList &transposes,
     for (size_t n = 0; n < max_tranpose_distance; n++) {
       const auto tcost = transpose_array[n];
       if (tcost != -1) {
-        // options.emplace_back(Typo(TypoKind::Transpose, j - 1, actual[j - 1]),
-        //                      tcost + fill_table(table, transposes, correct,
-        //                                         actual, i - (n + 1),
-        //                                         j - (n + 1)),
-        //                      place - (col * (n + 1)) - row * (n + 1));
+        options.emplace_back(Typo(TypoKind::Transpose, j - 1, actual[j - 1]),
+                             tcost + fill_table(table, transposes, correct,
+                                                actual, i - (n + 1),
+                                                j - (n + 1)),
+                             place - (col * (n + 1)) - row * (n + 1));
       }
     }
   }
@@ -174,8 +163,6 @@ auto find_typos(const TransposeList &transposes, const std::string &correct,
     }
     std::cout << std::endl;
   }
-  std::cout << data.size() << std::endl;
-  std::cout << new_correct.size() * new_actual.size() << std::endl;
   std::cout << data[new_correct.size() * (new_actual.size() - 1) - 1].cost
             << std::endl;
 
@@ -185,23 +172,24 @@ auto find_typos(const TransposeList &transposes, const std::string &correct,
   for (const auto &entry : result) {
     switch (entry.kind) {
     case TypoKind::Insert: {
-      std::cout << "Insert\n";
+      std::cout << "Insert " << entry.c << " at " << entry.idx << std::endl;
       break;
     }
     case TypoKind::Delete: {
-      std::cout << "Delete\n";
+      std::cout << "Delete " << entry.idx << std::endl;
       break;
     }
     case TypoKind::Substitute: {
-      std::cout << "Substitute\n";
+      std::cout << "Substitute " << entry.c << " at " << entry.idx << std::endl;
       break;
     }
     case TypoKind::Transpose: {
-      std::cout << "Transpose\n";
+      std::cout << "Transpose " << entry.idx << "-" << entry.idx + 1
+                << std::endl;
       break;
     }
     case TypoKind::None: {
-      std::cout << "None\n";
+      std::cout << "Pass\n";
       break;
     }
     }
