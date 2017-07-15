@@ -10,7 +10,7 @@ static const int insert_repeat = 1; ///< Insert a repeated character.
 static const int insert_space_ab =
     2; ///< Insert space after character on the bottom row.
 static const int insert_space_ae = 6; ///< Insert space after any character.
-static const int insert_char_as = 6;  ///< Insert character after space.
+static const int insert_char_bs = 6;  ///< Insert character before space.
 static const int insert_char_oh = 5;  ///< Insert character after other hand.
 
 static const int delete_repeat = 1;  ///< Delete a repeated chraacter.
@@ -19,7 +19,7 @@ static const int delete_char_sh = 2; ///< Delete a character on the same hand.
 static const int delete_char_oh = 6; ///< Delete a character after other hand.
 static const int delete_char_fc = 6; ///< Delete first character in string.
 
-static const int sub_space_char = 6; ///< Substitute space.
+static const int sub_space = 6; ///< Substitute space.
 static const int sub_char_sf =
     1; ///< Substitute a character from other hand, same finger.
 static const int sub_char_oh =
@@ -59,3 +59,27 @@ auto compute_substitute_cost(const char correct, const char actual) -> int;
  @param curr Current character of the correct string.
  */
 auto compute_transpose_cost(const char left, const char curr) -> int;
+
+#ifdef TESTS_ENABLED
+
+/**
+ @brief Tests compute_insert_cost.
+ */
+auto cost_test_compute_insert() -> bool;
+
+/**
+ @brief Tests compute_delete_cost.
+ */
+auto cost_test_compute_delete() -> bool;
+
+/**
+ @brief Tests compute_substitute_cost.
+ */
+auto cost_test_compute_substitute() -> bool;
+
+/**
+ @brief Tests compute_transpose_cost.
+ */
+auto cost_test_compute_transpose() -> bool;
+
+#endif
