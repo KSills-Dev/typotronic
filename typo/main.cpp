@@ -103,7 +103,7 @@ auto main(const int argc, const char **argv) -> int {
   std::cout << "But now I compile!\n";
 
   const std::string correct = "the rain in spain stays mainly on the plain";
-  const std::string actual = "teh driafna i pasin staya ksjnmly in the eplani";
+  const std::string actual = "teh driafna i pasin staya ksjnmly in th eplani";
   TransposeList result{};
   find_tranpose(result, sentinel + correct, sentinel + actual);
 
