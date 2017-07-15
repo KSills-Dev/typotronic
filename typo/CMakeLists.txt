@@ -24,10 +24,10 @@ target_compile_options(typo PRIVATE -Wall)
 OPTION(TESTS_ENABLED "Enable project test build." OFF)
 if (TESTS_ENABLED)
     message("Building tests.")
-    ADD_DEFINITIONS(-DTESTS_ENABLED)
 
     add_executable(typo-test ${HEADERS} test.cpp ${SOURCES})
 
+    target_compile_definitions(typo-test PRIVATE "-DTESTS_ENABLED")
     target_compile_options(typo-test PUBLIC -std=c++11)
     target_compile_options(typo-test PRIVATE -Wall)
 endif(TESTS_ENABLED)
