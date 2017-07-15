@@ -15,6 +15,19 @@ static const char sentinel = '\t';
  @see find_char_in_table
  */
 struct Coord {
+  Coord() = default;
+  Coord(const Coord &other) = default;
+  ~Coord() = default;
+
+  auto operator=(const Coord &other) -> Coord & = default;
+
+  auto operator==(const Coord &other) const -> bool {
+    return (row == other.row) && (col == other.col);
+  }
+  auto operator!=(const Coord &other) const -> bool {
+    return (row != other.row) || (col != other.col);
+  }
+
   int row;
   int col;
 };
@@ -74,3 +87,32 @@ Formula is `dist = max(|row_1 - row_2|, |col_1 - col_2|)`.
  @see find_char_in_table
  */
 auto distance(const Coord lhs, const Coord rhs) -> int;
+
+// Testing Suite
+#ifdef TESTS_ENABLED
+
+/**
+ @brief Tests find_char_in_table.
+ @see find_char_in_table
+ */
+auto layout_test_find_char() -> bool;
+
+/**
+ @brief Tests hand_for_char.
+ @see hand_for_char
+ */
+auto layout_test_find_hand() -> bool;
+
+/**
+ @brief Tests finger_for_char.
+ @see finger_for_char
+ */
+auto layout_test_find_finger() -> bool;
+
+/**
+ @brief Tests distance function.
+ @see distance
+ */
+auto layout_test_distance() -> bool;
+
+#endif
