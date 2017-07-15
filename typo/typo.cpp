@@ -156,52 +156,23 @@ auto fill_table(TypoTable &table, const TransposeList &transposes,
   return min_cell.cost;
 }
 
-auto find_typos(const TransposeList &transposes, const std::string &correct,
-                const std::string &actual) -> TypoStack {
+auto find_typos(const std::string &correct, const std::string &actual)
+    -> std::pair<int, TypoStack> {
   const auto new_correct = sentinel + correct;
   const auto new_actual = sentinel + actual + sentinel;
+
+  TransposeList transposes{};
+  find_tranpose(transposes, sentinel + correct, sentinel + actual);
+
   TypoTable data{new_correct.size() * (new_actual.size() - 1)};
   fill_table(data, transposes, new_correct, new_actual, new_correct.size() - 1,
              new_actual.size() - 2);
 
-  std::cout << std::endl;
-  for (auto i = 0; i < new_correct.size(); i++) {
-    for (auto j = 0; j < (new_actual.size() - 1); j++) {
-      std::cout << std::setfill(' ') << std::setw(3)
-                << data[i * (new_actual.size() - 1) + j].cost << " ";
-    }
-    std::cout << std::endl;
-  }
-  std::cout << data[new_correct.size() * (new_actual.size() - 1) - 1].cost
-            << std::endl;
+  const auto final_cost =
+      data[new_correct.size() * (new_actual.size() - 1) - 1].cost;
 
-  auto result =
+  const auto typos =
       find_typos(data, new_correct.size() * (new_actual.size() - 1) - 1);
-  std::cout << std::endl;
-  for (const auto &entry : result) {
-    switch (entry.kind) {
-    case TypoKind::Insert: {
-      std::cout << "Insert " << entry.c << " before " << entry.idx << std::endl;
-      break;
-    }
-    case TypoKind::Delete: {
-      std::cout << "Delete " << entry.idx << std::endl;
-      break;
-    }
-    case TypoKind::Substitute: {
-      std::cout << "Substitute " << entry.c << " at " << entry.idx << std::endl;
-      break;
-    }
-    case TypoKind::Transpose: {
-      std::cout << "Transpose " << entry.idx << "-" << entry.idx + 1
-                << std::endl;
-      break;
-    }
-    case TypoKind::None: {
-      break;
-    }
-    }
-  }
 
-  return TypoStack{};
+  return std::make_pair(final_cost, typos);
 }

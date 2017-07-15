@@ -39,5 +39,5 @@ using TransposeList =
 auto find_tranpose(TransposeList &data, const std::string &correct,
                    const std::string &actual) -> void;
 
-auto find_typos(const TransposeList &transposes, const std::string &correct,
-                const std::string &actual) -> TypoStack;
+auto find_typos(const std::string &correct, const std::string &actual)
+    -> std::pair<int, TypoStack>;
