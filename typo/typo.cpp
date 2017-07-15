@@ -2,6 +2,7 @@
 #include "costs.hpp"
 #include "layout.hpp"
 
+#include <algorithm>
 #include <iomanip>
 #include <iostream>
 
@@ -210,15 +211,8 @@ auto fill_table(TypoTable &table, const TransposeList &transposes,
     }
   }
 
-  // Select smallest path
-  auto min_cell = options[0];
-  for (size_t i = 1; i < options.size(); i++) {
-    if (options[i].cost < min_cell.cost) {
-      min_cell = options[i];
-    }
-  }
-  table[place] = min_cell;
-  return min_cell.cost;
+  table[place] = *std::min_element(options.begin(), options.end());
+  return table[place].cost;
 }
 
 auto find_typos(const std::string &correct, const std::string &actual)

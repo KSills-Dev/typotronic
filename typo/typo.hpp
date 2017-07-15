@@ -31,6 +31,9 @@ struct TypoCell {
   TypoCell() = default;
   TypoCell(const Typo typo, const int cost, const int parent)
       : typo(typo), cost(cost), parent(parent){};
+
+  auto operator<(const TypoCell &other) -> bool { return (cost < other.cost); }
+
   Typo typo;
   int cost = 0;
   int parent = -1;
