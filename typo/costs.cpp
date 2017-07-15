@@ -16,6 +16,8 @@ auto compute_insert_cost(const char left, const char curr, const char right)
   if (curr == ' ') {
     if (place_left.row == 3) {
       return cost::insert_space_ab;
+    } else {
+      return cost::insert_space_ae;
     }
   }
 

@@ -96,13 +96,15 @@
 //   return do_stuff("\0" + correct, "\0" + actual + '\0');
 // }
 
+#include "costs.hpp"
+
 auto main(const int argc, const char **argv) -> int {
   std::cout << "I'm not a stub anymore!\n\n";
 
   const std::string correct = "the rain in spain stays mainly on the plain";
   const std::string actual = "teh driafna i pasin staya ksjnmly in th eplani";
 
-  auto result = find_typos(correct, actual);
+  const auto result = find_typos(correct, actual);
 
   std::cout << "Final cost: " << result.first;
   std::cout << "\n---\n";
