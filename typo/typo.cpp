@@ -51,8 +51,17 @@ auto find_typos(const TypoTable &table, const int place) -> TypoStack {
   }
 
   const auto entry = table[place];
+  const auto typo = entry.typo;
   auto result = find_typos(table, entry.parent);
-  result.push_back(entry.typo);
+  if (typo.kind == TypoKind::Transpose) {
+    // Transposition Expansion
+    for (auto i = 0; i < typo.n; i++) {
+      result.push_back(Typo{typo.kind, typo.idx + i, typo.n});
+    }
+  } else {
+    result.push_back(typo);
+  }
+
   return result;
 }
 
@@ -127,7 +136,7 @@ auto fill_table(TypoTable &table, const TransposeList &transposes,
     for (size_t n = 0; n < max_tranpose_distance; n++) {
       const auto tcost = transpose_array[n];
       if (tcost != -1) {
-        options.emplace_back(Typo(TypoKind::Transpose, j - 2, actual[j - 1]),
+        options.emplace_back(Typo(TypoKind::Transpose, j - 2, n + 1),
                              tcost + fill_table(table, transposes, correct,
                                                 actual, i - (n + 2),
                                                 j - (n + 2)),

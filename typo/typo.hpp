@@ -13,7 +13,10 @@ struct Typo {
 
   TypoKind kind;
   size_t idx;
-  char c;
+  union {
+    char c;
+    char n;
+  };
 };
 
 struct TypoCell {
