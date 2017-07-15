@@ -4,14 +4,30 @@ set(HEADERS
     layout.hpp
     typo.hpp)
 
+if (${tests_enabled} MATCHES "ON")
+    message("Tests building")
+else(${tests_enabled} MATCHES "ON")
+endif(${tests_enabled} MATCHES "ON")
+
 set(SOURCES
-    main.cpp
     util.cpp
     costs.cpp
     layout.cpp
     typo.cpp)
 
-add_executable(typo ${HEADERS} ${SOURCES})
+add_executable(typo ${HEADERS} main.cpp ${SOURCES})
 
 target_compile_options(typo PUBLIC -std=c++11)
 target_compile_options(typo PRIVATE -Wall)
+
+
+OPTION(TESTS_ENABLED "Enable project test build." OFF)
+if (TESTS_ENABLED)
+    message("Building tests.")
+    ADD_DEFINITIONS(-DTESTS_ENABLED)
+
+    add_executable(typo-test ${HEADERS} test.cpp ${SOURCES})
+
+    target_compile_options(typo-test PUBLIC -std=c++11)
+    target_compile_options(typo-test PRIVATE -Wall)
+endif(TESTS_ENABLED)
