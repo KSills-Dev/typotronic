@@ -75,7 +75,7 @@ auto fill_table(TypoTable &table, const TransposeList &transposes,
 
   if (i == 0) {
     // Correct string consumed
-    table[place].typo = Typo(TypoKind::Insert, j, actual[j]);
+    table[place].typo = Typo(TypoKind::Insert, j - 1, actual[j]);
     table[place].parent = place - row;
     table[place].cost =
         fill_table(table, transposes, correct, actual, i, j - 1);
@@ -85,7 +85,7 @@ auto fill_table(TypoTable &table, const TransposeList &transposes,
   }
   if (j == 0) {
     // Actual string consumed
-    table[place].typo = Typo(TypoKind::Delete, j, correct[i]);
+    table[place].typo = Typo(TypoKind::Delete, j - 1, correct[i]);
     table[place].parent = place - col;
     table[place].cost =
         fill_table(table, transposes, correct, actual, i - 1, j);
@@ -103,11 +103,11 @@ auto fill_table(TypoTable &table, const TransposeList &transposes,
 
   // Other possibilities
   std::vector<TypoCell> options{
-      TypoCell(Typo(TypoKind::Insert, j, actual[j]),
+      TypoCell(Typo(TypoKind::Insert, j - 1, actual[j]),
                compute_insert_cost(actual[j - 1], actual[j], actual[j + 1]) +
                    cost_insert,
                place - row),
-      TypoCell(Typo(TypoKind::Delete, j, correct[i]),
+      TypoCell(Typo(TypoKind::Delete, j - 1, correct[i]),
                compute_delete_cost(actual[j - 1], correct[i]) + cost_delete,
                place - col)};
 
@@ -115,7 +115,7 @@ auto fill_table(TypoTable &table, const TransposeList &transposes,
   if (correct[i] == actual[j]) {
     options.emplace_back(Typo(), cost_sub_skip, place - col - row);
   } else {
-    options.emplace_back(Typo(TypoKind::Substitute, j, actual[j]),
+    options.emplace_back(Typo(TypoKind::Substitute, j - 1, actual[j]),
                          compute_substitute_cost(correct[i], actual[j]) +
                              cost_sub_skip,
                          place - col - row);
@@ -127,7 +127,7 @@ auto fill_table(TypoTable &table, const TransposeList &transposes,
     for (size_t n = 0; n < max_tranpose_distance; n++) {
       const auto tcost = transpose_array[n];
       if (tcost != -1) {
-        options.emplace_back(Typo(TypoKind::Transpose, j - 1, actual[j - 1]),
+        options.emplace_back(Typo(TypoKind::Transpose, j - 2, actual[j - 1]),
                              tcost + fill_table(table, transposes, correct,
                                                 actual, i - (n + 1),
                                                 j - (n + 1)),
@@ -158,8 +158,8 @@ auto find_typos(const TransposeList &transposes, const std::string &correct,
   std::cout << std::endl;
   for (auto i = 0; i < new_correct.size(); i++) {
     for (auto j = 0; j < (new_actual.size() - 1); j++) {
-      std::cout << std::setfill(' ') << std::setw(4)
-                << data[i * (new_actual.size() - 1) + j].parent << " ";
+      std::cout << std::setfill(' ') << std::setw(3)
+                << data[i * (new_actual.size() - 1) + j].cost << " ";
     }
     std::cout << std::endl;
   }
