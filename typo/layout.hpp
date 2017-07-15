@@ -1,6 +1,6 @@
 #pragma once
 
-#include "util.hpp"
+#include <vector>
 
 /**
  @brief Sentinel value appended to start/end of strings during typo check.

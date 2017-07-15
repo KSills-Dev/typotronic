@@ -1,5 +1,4 @@
 set(HEADERS
-    util.hpp
     costs.hpp
     layout.hpp
     typo.hpp)
@@ -10,7 +9,6 @@ else(${tests_enabled} MATCHES "ON")
 endif(${tests_enabled} MATCHES "ON")
 
 set(SOURCES
-    util.cpp
     costs.cpp
     layout.cpp
     typo.cpp)
