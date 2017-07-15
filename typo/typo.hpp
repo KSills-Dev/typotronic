@@ -1,15 +1,21 @@
 #pragma once
 
+#include <iostream>
+#include <string>
 #include <unordered_map>
 #include <vector>
 
 enum class TypoKind { None, Substitute, Insert, Delete, Transpose };
+
+auto operator<<(std::ostream &stream, const TypoKind kind) -> std::ostream &;
 
 struct Typo {
   Typo() : kind(TypoKind::None), idx(0), c('\0'){};
   Typo(const TypoKind kind, const size_t idx) : kind(kind), idx(idx), c('\0') {}
   Typo(const TypoKind kind, const size_t idx, const char c)
       : kind(kind), idx(idx), c(c) {}
+
+  auto to_string() const -> std::string;
 
   TypoKind kind;
   size_t idx;
@@ -18,6 +24,8 @@ struct Typo {
     char n;
   };
 };
+
+auto operator<<(std::ostream &stream, const Typo typo) -> std::ostream &;
 
 struct TypoCell {
   TypoCell() = default;

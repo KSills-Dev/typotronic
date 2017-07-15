@@ -5,6 +5,69 @@
 #include <iomanip>
 #include <iostream>
 
+auto operator<<(std::ostream &stream, const TypoKind kind) -> std::ostream & {
+  switch (kind) {
+  case TypoKind::None: {
+    break;
+  }
+  case TypoKind::Substitute: {
+    stream << "Substitute";
+  }
+  case TypoKind::Insert: {
+    stream << "Insert";
+    break;
+  }
+  case TypoKind::Delete: {
+    stream << "Delete";
+    break;
+  }
+  case TypoKind::Transpose: {
+    stream << "Transpose";
+    break;
+  }
+  default: {
+    stream << "POORLY-FORMED-TYPO\n";
+    break;
+  }
+  }
+
+  return stream;
+}
+
+auto Typo::to_string() const -> std::string {
+  switch (kind) {
+  case TypoKind::None: {
+    return "";
+    break;
+  }
+  case TypoKind::Substitute: {
+    return std::string("Substitute ") + c + " at " + std::to_string(idx);
+  }
+  case TypoKind::Insert: {
+    return std::string("Insert ") + c + " before " + std::to_string(idx);
+    break;
+  }
+  case TypoKind::Delete: {
+    return std::string("Delete ") + std::to_string(idx);
+    break;
+  }
+  case TypoKind::Transpose: {
+    return std::string("Transpose ") + std::to_string(idx) + "-" +
+           std::to_string(idx + 1);
+    break;
+  }
+  default: {
+    return "POORLY-FORMED-TYPO\n";
+    break;
+  }
+  }
+}
+
+auto operator<<(std::ostream &stream, const Typo typo) -> std::ostream & {
+  stream << typo.to_string();
+  return stream;
+}
+
 auto find_tranpose(TransposeList &data, const std::string &correct,
                    const std::string &actual) -> void {
   for (auto i = correct.size() - 1; i > 1; --i) {
@@ -52,6 +115,7 @@ auto find_typos(const TypoTable &table, const int place) -> TypoStack {
 
   const auto entry = table[place];
   const auto typo = entry.typo;
+
   auto result = find_typos(table, entry.parent);
 
   if (typo.kind == TypoKind::Transpose) {
@@ -59,7 +123,7 @@ auto find_typos(const TypoTable &table, const int place) -> TypoStack {
     for (auto i = 0; i < typo.n; i++) {
       result.push_back(Typo{typo.kind, typo.idx + i, typo.n});
     }
-  } else {
+  } else if (typo.kind != TypoKind::None) {
     result.push_back(typo);
   }
 
