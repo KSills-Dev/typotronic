@@ -40,12 +40,12 @@ auto compute_insert_cost(const char left, const char curr, const char right)
   return minv;
 }
 
-auto compute_delete_cost(const char left, const char curr) -> int {
-  if (left == curr) {
+auto compute_delete_cost(const char left, const char corr) -> int {
+  if (left == corr) {
     return cost::delete_repeat;
   }
 
-  if (curr == ' ') {
+  if (corr == ' ') {
     return cost::delete_space;
   }
   if (left == sentinel || left == ' ') {
@@ -53,8 +53,8 @@ auto compute_delete_cost(const char left, const char curr) -> int {
   }
 
   const auto place_left = find_char_in_table(left);
-  const auto place_curr = find_char_in_table(curr);
-  if (hand_for_char(place_left) == hand_for_char(place_curr)) {
+  const auto place_corr = find_char_in_table(corr);
+  if (hand_for_char(place_left) == hand_for_char(place_corr)) {
     return cost::delete_char_sh;
   } else {
     return cost::delete_char_oh;
