@@ -1,7 +1,8 @@
 set(HEADERS
     costs.hpp
     layout.hpp
-    typo.hpp)
+    typo.hpp
+    io.hpp)
 
 if (${tests_enabled} MATCHES "ON")
     message("Tests building")
@@ -11,7 +12,8 @@ endif(${tests_enabled} MATCHES "ON")
 set(SOURCES
     costs.cpp
     layout.cpp
-    typo.cpp)
+    typo.cpp
+    io.cpp)
 
 add_executable(typo ${HEADERS} main.cpp ${SOURCES})
 
