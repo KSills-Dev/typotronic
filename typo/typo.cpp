@@ -8,7 +8,7 @@
 auto find_tranpose(TransposeList &data, const std::string &correct,
                    const std::string &actual) -> void {
   for (auto i = correct.size() - 1; i > 1; --i) {
-    for (auto j = correct.size() - 1; j > 1; --j) {
+    for (auto j = actual.size() - 1; j > 1; --j) {
       const auto corr = correct[i];
       const auto curr = actual[j];
       const auto left = actual[j - 1];
