@@ -25,7 +25,7 @@ auto finger_for_char(const Coord place) -> Finger {
     col = col * -1 + 9;
   }
 
-  // Pointer finger used for last 2 columns each hand.
+  // Index finger used for last 2 columns each hand.
   col = (col == 4) ? 3 : col;
   return static_cast<Finger>(col);
 }

@@ -27,7 +27,7 @@ enum class Hand { Left = 0, Right = 1 };
 /**
  @brief Finger used to press a given key - hand independent.
  */
-enum class Finger { Pinky = 0, Ring = 1, Middle = 2, Pointer = 3 };
+enum class Finger { Pinky = 0, Ring = 1, Middle = 2, Index = 3 };
 
 /**
  @brief Keyboard layout for coordinate finding.
