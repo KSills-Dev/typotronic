@@ -85,7 +85,7 @@ auto fill_table(TypoTable &table, const TransposeList &transposes,
   }
   if (j == 0) {
     // Actual string consumed
-    table[place].typo = Typo(TypoKind::Delete, j - 1, correct[i]);
+    table[place].typo = Typo(TypoKind::Delete, j, correct[i]);
     table[place].parent = place - col;
     table[place].cost =
         fill_table(table, transposes, correct, actual, i - 1, j);
@@ -107,7 +107,7 @@ auto fill_table(TypoTable &table, const TransposeList &transposes,
                compute_insert_cost(actual[j - 1], actual[j], actual[j + 1]) +
                    cost_insert,
                place - row),
-      TypoCell(Typo(TypoKind::Delete, j - 1, correct[i]),
+      TypoCell(Typo(TypoKind::Delete, j, correct[i]),
                compute_delete_cost(actual[j - 1], correct[i]) + cost_delete,
                place - col)};
 
@@ -172,7 +172,7 @@ auto find_typos(const TransposeList &transposes, const std::string &correct,
   for (const auto &entry : result) {
     switch (entry.kind) {
     case TypoKind::Insert: {
-      std::cout << "Insert " << entry.c << " at " << entry.idx << std::endl;
+      std::cout << "Insert " << entry.c << " before " << entry.idx << std::endl;
       break;
     }
     case TypoKind::Delete: {
@@ -189,7 +189,6 @@ auto find_typos(const TransposeList &transposes, const std::string &correct,
       break;
     }
     case TypoKind::None: {
-      std::cout << "Pass\n";
       break;
     }
     }
