@@ -1,4 +1,5 @@
 #include "costs.hpp"
+#include "layout.hpp"
 #include "typo.hpp"
 
 #include <iostream>
@@ -104,7 +105,7 @@ auto main(const int argc, const char **argv) -> int {
   const std::string correct = "the rain in spain stays mainly on the plain";
   const std::string actual = "teh driafna i pasin staya ksjnmly in the eplani";
   TransposeList result{};
-  find_tranpose(result, correct, actual);
+  find_tranpose(result, sentinel + correct, sentinel + actual);
 
   for (const auto &pairs : result) {
     auto i = pairs.first / actual.size();
