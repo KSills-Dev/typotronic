@@ -8,7 +8,7 @@
 auto find_tranpose(TransposeList &data, const std::string &correct,
                    const std::string &actual) -> void {
   for (auto i = correct.size() - 1; i > 1; --i) {
-    for (auto j = correct.size() - 1; j > 0; --j) {
+    for (auto j = correct.size() - 1; j > 1; --j) {
       const auto corr = correct[i];
       const auto curr = actual[j];
       const auto left = actual[j - 1];
@@ -22,16 +22,16 @@ auto find_tranpose(TransposeList &data, const std::string &correct,
         working.fill(-1);
         auto found = false;
         auto running_cost = 0;
-        for (auto n = 0; n < max_tranpose_distance; n++) {
+        for (auto n = 1; n < max_tranpose_distance; n++) {
           const auto corr = correct[i - n];
           const auto left = actual[j - 1 - n];
 
           running_cost += compute_transpose_cost(left, curr);
           if (curr == corr) {
-            working[n] = running_cost;
+            working[n - 1] = running_cost;
             found = true;
           } else {
-            working[n] = -1;
+            working[n - 1] = -1;
           }
           if (corr != left) {
             break;
@@ -129,9 +129,9 @@ auto fill_table(TypoTable &table, const TransposeList &transposes,
       if (tcost != -1) {
         options.emplace_back(Typo(TypoKind::Transpose, j - 2, actual[j - 1]),
                              tcost + fill_table(table, transposes, correct,
-                                                actual, i - (n + 1),
-                                                j - (n + 1)),
-                             place - (col * (n + 1)) - row * (n + 1));
+                                                actual, i - (n + 2),
+                                                j - (n + 2)),
+                             place - (col * (n + 2)) - row * (n + 2));
       }
     }
   }
