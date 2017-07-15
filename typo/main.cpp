@@ -108,8 +108,8 @@ auto main(const int argc, const char **argv) -> int {
   find_tranpose(result, sentinel + correct, sentinel + actual);
 
   for (const auto &pairs : result) {
-    auto i = pairs.first / actual.size();
-    auto j = pairs.first % actual.size();
+    auto i = pairs.first / (actual.size() + 1) - 1;
+    auto j = pairs.first % (actual.size() + 1) - 1;
     std::cout << i << "," << j << " (" << correct[i] << "," << actual[j]
               << "): ";
     for (const auto &value : pairs.second) {
