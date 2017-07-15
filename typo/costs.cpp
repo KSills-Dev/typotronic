@@ -23,16 +23,16 @@ auto compute_insert_cost(const char left, const char curr, const char right)
 
   if (left != ' ' && left != sentinel &&
       hand_for_char(place_left) == hand_for_char(place_curr)) {
-    minv = min({minv, distance(place_left, place_curr)});
+    minv = min(minv, distance(place_left, place_curr));
   } else {
-    minv = min({minv, cost::insert_char_oh});
+    minv = min(minv, cost::insert_char_oh);
   }
 
   if (right != ' ' && right != sentinel &&
       hand_for_char(place_right) == hand_for_char(place_curr)) {
-    minv = min({minv, distance(place_right, place_curr)});
+    minv = min(minv, distance(place_right, place_curr));
   } else {
-    minv = min({minv, cost::insert_char_oh});
+    minv = min(minv, cost::insert_char_oh);
   }
 
   return minv;

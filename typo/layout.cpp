@@ -33,7 +33,7 @@ auto finger_for_char(const Coord place) -> Finger {
 auto distance(const Coord lhs, const Coord rhs) -> int {
   auto row_diff = (lhs.row > rhs.row) ? lhs.row - rhs.row : rhs.row - lhs.row;
   auto col_diff = (lhs.col > rhs.col) ? lhs.col - rhs.col : rhs.col - lhs.col;
-  return max({row_diff, col_diff});
+  return max(row_diff, col_diff);
 }
 
 #ifdef TESTS_ENABLED
