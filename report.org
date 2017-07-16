@@ -43,16 +43,87 @@ transpositions.
 \LinesNumbered
 \SetKwProg{Func}{Algorithm}{\string:}{end}
 \SetKwFunction{fill}{Fill}
+\SetKwFunction{findtransp}{find\_transposes}
+\SetKwFunction{insertcost}{insert\_cost}
+\SetKwFunction{deletecost}{delete\_cost}
+\SetKwFunction{substitutecost}{substitute\_cost}
+\SetKwFunction{len}{length}
 \SetKw{return}{return}
-\SetKw{from}{from}
+\SetKw{KwFrom}{from}
+\SetStartEndCondition{ }{}{}%
+\SetKwProg{Fn}{def}{\string:}{}
+\SetKwFunction{Range}{range}%%
+\SetKw{KwTo}{in}\SetKwFor{For}{for}{\string:}{}%
+\SetKw{KwInsert}{Insert}
+\SetKw{KwDelete}{Delete}
+\SetKw{KwNone}{None}
+\SetKw{KwSubstitute}{Substitute}
+\SetKw{KwTranspose}{Transpose}
+\SetKwIF{If}{ElseIf}{Else}{if}{:}{elif}{else:}{}%
+\SetKwFor{While}{while}{:}{fintq}%
 \KwIn{data: Table containing the memoized data}
-\KwIn{transposes: List of possible transpositions}
+\KwIn{transposes: Set of possible transpositions}
 \KwIn{correct: The correct string}
 \KwIn{actual: The actual string with typos} 
 \KwIn{i: Current position into the correct string}
 \KwIn{j: Current position into the actual string}
 \KwOut{Running cost of typos}
-\Func{\fill{data,transposes, correct, actual, i, j}}{
+\AlgoDontDisplayBlockMarkers\SetAlgoNoEnd\SetAlgoNoLine%
+\Fn{\findtransp()}{
+  \For{i \KwFrom 1 \KwTo \len(correct)}{
+    \For{j \KwFrom 1 \KwTo \len(actual)}{
+    
+    }
+  }
+}
+\Fn{\fill{i, j}}{
+  \uIf{$data[i,j]$ has a value}{
+    \return the cost in $data[i,j]$\\
+  }
+  \uElseIf{$i==1$ and $j==1$} {
+    \return $0$
+  }
+  \uElseIf{$i==1$} {
+    Let the cost be $\insertcost(i,j) + \fill(i, j-1)$\\
+    Store the cost in $data[i,j]$\\
+    Set the typo of $data[i,j]$ to \KwInsert\\
+    Set the parent of $data[i,j]$ to $(i, j-1)$\\
+    \return the cost\\
+  }
+  \uElseIf{$j==1$}{
+    Let the cost be $\deletecost(i,j) + \fill(i-1, j)$\\
+    Store the cost in $data[i,j]$\\
+    Set the typo of $data[i,j]$ to \KwDelete\\
+    Set the parent of $data[i,j]$ to $(i-1, j)$\\
+    \return the cost\\
+  }
+  \Else{
+    Let $options$ be a list of possible errors.\\
+    Add an \KwInsert error to $options$ with cost 
+      $\insertcost(i,j) + \fill(i, j-1)$ and parent
+      $(i, j-1)$\\
+    Add a \KwDelete error to $options$ with cost 
+      $\deletecost(i,j) + \fill(i-1, j)$ and parent
+      $(i-1, j)$\\
+    \uIf{$correct[i]==actual[j]$}{
+      Add a \KwNone error with cost $\fill(i-1, j-1)$ and parent $(i-1,j-1)$\\
+    }
+    \Else{
+      Add a \KwSubstitute error to $options$ with cost
+        $\substitutecost(i,j) + \fill(i-1, j-1)$ and parent
+        $(i-1, j-1)$\\
+    }
+    \uIf{There are transpositions in $transpoes[i,j]$}{
+      \For{$t$ in $transpoes[i,j]$}{
+        Add a \KwTranspose error with cost
+          $t.cost + \fill(i-t.length, j-t.length)$ and parent
+          $(i-t.length, j-t.length)$\\
+      }
+    }
+    Pick the minimum option in $options$\\
+    Store the cost, error type, and parent in in $data[i,j]$\\
+    \return the cost\\
+  }
 }
 \end{algorithm}
 #+end_export
@@ -67,7 +138,10 @@ So, as a whole, the algorithm takes O(n * m) time complexity.
 
 * Pseudocode for nested loop
 * Can the space complexity of the iterative algorithm be improved relative to the memoized algorithm
-
+No, because the iterative algorithm has to build up every case from the base
+cases regardless of if that case will be used to compute the final result. The
+memoized algorithm, on the other hand, will only used enough space to store the
+results of the cases used.
 * Describe one advantage and disadvantage of the iterative algorithm
 
 
