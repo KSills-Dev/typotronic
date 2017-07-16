@@ -17,3 +17,5 @@ And to run:
 ```
 
 **Build Mode** can be changed by passing CMake the `-DCMAKE_BUILD_TYPE=[RELEASE|DEBUG]` flag.
+
+**Optional Test Build** can be enabled by passing CMake `-DTESTS_ENABLED=ON`.
