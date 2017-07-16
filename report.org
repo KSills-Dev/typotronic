@@ -5,6 +5,7 @@
 #+LaTeX_HEADER: \usepackage[boxed]{algorithm2e}
 #+LaTeX_HEADER: \usepackage{mathtools}
 #+LaTeX_HEADER: \usepackage{amsmath}
+#+LaTeX_HEADER: \usepackage{hyperref}
 #+LaTeX_HEADER: \DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
 
 * Breaking Down Problems
@@ -20,39 +21,36 @@ representing the positions in $p$ and $t$ currently being compared
 * What recurrence can you use
 The naive recurrence we came up with was:
 
-$$ C(pattern, typo) = \min(choices) $$
-
-where
 #+BEGIN_EXPORT latex
-  \[ m = length(pattern) \]
-  \[ n = length(typo) \]
   \[
-  choices =
+  C(p, t) =
   \begin{cases}
-  \left\{
+  \min \left\{
   \begin{aligned}
-  & C(pattern[1..m-1], typo) + insertCost(pattern[m], pattern[m-1]), \\
-  & C(pattern, typo[1..n-1]) + deleteCost(typo[n], typo[n-1]), \\
-  & C(pattern[1..m-1], typo[1..n-1]) + substituteCost(pattern[m], typo[n]), \\
-  & C(pattern[1..m-1], typo[1..n-2]\, ||\, typo[n]) + transposeCost(typo[n-1], typo[n])
+  & C(p[1..m-1], t) + insertCost(p[m], p[m-1]), \\
+  & C(p, t[1..n-1]) + deleteCost(t[n], t[n-1]), \\
+  & C(p[1..m-1], t[1..n-1]) + substituteCost(p[m], t[n]), \\
+  & C(p[1..m-1], t[1..n-2]\, ||\footnotemark\, t[n]) + transposeCost(t[n-1], t[n])
   \end{aligned}
-  \right\}, & m \ge 1, n \ge 1 \\
+  \right\}, & m > 1, n > 1 \\
 
-  \left\{ C(pattern[1..m-1], typo) + insertCost(pattern[m], pattern[m-1]) \right\}, & m = 0, n \ge 1 \\
-  \left\{ C(pattern, typo[1..n-1]) + deleteCost(typo[n], typo[n-1]) \right\}, & m \ge 1, n = 0 \\
-  {0}, & m = 0, n = 0
-  \end{cases}
+  C(p[1..m-1], t) + insertCost(p[m], p[m-1]), & m = 1, n > 1 \\
+  C(p, t[1..n-1]) + deleteCost(t[n], t[n-1]), & m > 1, n = 1 \\
+  0, & m = 1, n = 1
+  \end{cases} \\
+
+  \begin{align*}
+  \rm{where}~ m & = \rm{length}(pattern), \\
+              n & = \rm{length}(typo)
+  \end{align*}
   \]
+  \footnotetext{Note that foo is the string concatenation operator here}
 #+END_EXPORT
-
-(Note that $||$ is the string concatenation operator here)
 
 This ended up being extremely inefficient in practice: the transposition operator doesn't allow us to
 memoize the main function using simply a 2d array, since transposing affects the typo string when
 recursing. We can't simply assume that the typo string and pattern strings are simply truncated between
 calls.
-
-We ended up slightly modifying the transposition recurrence:
 
 * What are the base cases
 Whenever $i$ or $j$ are equal to 1. If $i = 1$, the remaining characters in $t[1..j-1]$
