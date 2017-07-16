@@ -202,7 +202,7 @@ auto fill_table(TypoTable &table, const TransposeList &transposes,
     for (size_t n = 0; n < max_tranpose_distance; n++) {
       const auto tcost = transpose_array[n];
       if (tcost != -1) {
-        options.emplace_back(Typo(TypoKind::Transpose, j - 2, n + 1),
+        options.emplace_back(Typo(TypoKind::Transpose, j - 2 - n, n + 1),
                              tcost + fill_table(table, transposes, correct,
                                                 actual, i - (n + 2),
                                                 j - (n + 2)),
