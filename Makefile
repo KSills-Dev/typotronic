@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS=-std=c++11
+CXXFLAGS=-std=c++11 -O2 -DNDEBUG
 
 all: typo/typo
 	cp typo/typo run
