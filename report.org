@@ -75,7 +75,7 @@ transpositions.
 
 * Pseudocode for a memoized dynamic programming solution
 #+begin_export latex
-\begin{algorithm}
+\begin{algorithm}[H]
 \LinesNumbered
 \SetKwProg{Func}{Algorithm}{\string:}{end}
 \SetKwFunction{fill}{Fill}
