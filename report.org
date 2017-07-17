@@ -306,10 +306,8 @@ So, as a whole, the algorithm takes O(n * m) time complexity.
         Pick the minimum option in $options$\\
         Store the cost, error type, and parent in in $data[i,j]$\\
       }
-      \uIf{(i, j) is (1,1)}{
-        \return the cost in $data[1,1]$ and the chain of parents starting in that cell\\
-      }
     }
+    \return the cost in data[\len{correct}, \len{actual}] and the chain of parents starting in that cell\\
   }
 }
 \end{algorithm}
