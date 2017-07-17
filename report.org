@@ -95,7 +95,7 @@ transpositions.
 \SetKwFor{While}{while}{:}{fintq}%
 \SetKwFor{Until}{until}{:}{fintq}%
 \Func{\main}{
-  Fill the parents of data with $(-1, -1)$\\
+  Set all the parents of data to $(-1, -1)$\\
   \findtransp(correct, actual, transposes)\\
   \fill(corect, actual, data, transposes i, j)\\
   Let $p$ be $(i,j)$\\
