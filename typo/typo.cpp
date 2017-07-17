@@ -86,7 +86,7 @@ auto find_tranpose(TransposeList &data, const std::string &correct,
         working.fill(-1);
         auto found = false;
         auto running_cost = compute_transpose_cost(left, curr);
-        for (auto n = 1; n < max_tranpose_distance; n++) {
+        for (auto n = 1; n < max_tranpose_distance && ((i-n)>1) && ((j-1-n)>1); n++) {
           const auto corr = correct[i - n];
           const auto left = actual[j - 1 - n];
 
