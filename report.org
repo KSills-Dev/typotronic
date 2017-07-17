@@ -265,49 +265,49 @@ So, as a whole, the algorithm takes O(n * m) time complexity.
 }
 
 \Fn{\findtypos{\correct, \actual}}{
-  Let \data be a new integer array with dimensions (\len{\correct}, \len{\actual})\\
-  \For{i \KwFrom \len{\correct} \downto 1}{
-    \For{j \KwFrom \len{\actual} \downto 1}{
+  Let \data be a new typo array with dimensions (\len{\correct}, \len{\actual})\\
+  \For{i \KwFrom 1 \KwTo \len{\correct}}{
+    \For{j \KwFrom 1 \KwTo \len{\actual}}{
       \uIf{$i=1$ and $j\ne1$} {
-        Let the cost be $\insertcost(i,j) + data[i, j+1]$\\
+        Let the cost be $\insertcost(i,j) + data[i, j-1]$\\
         Store the cost in $data[i,j]$\\
         Set the typo of $data[i,j]$ to \KwInsert\\
-        Set the parent of $data[i,j]$ to $(i, j+1)$\\
+        Set the parent of $data[i,j]$ to $(i, j-1)$\\
       }
       \uElseIf{$i \ne 1$ and $j=1$}{
-        Let the cost be $\deletecost(i,j) + ddata[i+1, j]$\\
+        Let the cost be $\deletecost(i,j) + data[i-1, j]$\\
         Store the cost in $data[i,j]$\\
         Set the typo of $data[i,j]$ to \KwDelete\\
-        Set the parent of $data[i,j]$ to $(i+1, j)$\\
+        Set the parent of $data[i,j]$ to $(i-1, j)$\\
       }
       \Else{
         Let $options$ be a list of possible errors.\\
         Add an \KwInsert error to $options$ with cost
-          $\insertcost(i,j) + data[i, j+1]$ and parent
-          $(i, j+1)$\\
+          $\insertcost(i,j) + data[i, j-1]$ and parent
+          $(i, j-1)$\\
         Add a \KwDelete error to $options$ with cost
-          $\deletecost(i,j) + data[i+1, j]$ and parent
-          $(i+1, j)$\\
+          $\deletecost(i,j) + data[i-1, j]$ and parent
+          $(i-1, j)$\\
         \uIf{$correct[i]==actual[j]$}{
           Add a \KwNone error with cost 0 and parent $(i-1,j-1)$\\
         }
         \Else{
           Add a \KwSubstitute error to $options$ with cost
-            $\substitutecost(i,j) + data[i+1, j+1]$ and parent
-            $(i+1, j+1)$\\
+            $\substitutecost(i,j) + data[i-1, j-1]$ and parent
+            $(i-1, j-1)$\\
         }
         \uIf{There are transpositions in $transpoes[i,j]$}{
           \For{$t$ in $transpoes[i,j]$}{
             Add a \KwTranspose error with cost
               $t.cost + data[i-t.length, j-t.length]$ and parent
-              $(i+t.length, j+t.length)$\\
+              $(i-t.length, j-t.length)$\\
           }
         }
         Pick the minimum option in $options$\\
         Store the cost, error type, and parent in in $data[i,j]$\\
       }
       \uIf{(i, j) is (1,1)}{
-        \return the cost in $data[1,1]$ chain of parents starting in that cell\\
+        \return the cost in $data[1,1]$ and the chain of parents starting in that cell\\
       }
     }
   }
