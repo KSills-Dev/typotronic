@@ -44,7 +44,7 @@ The naive recurrence we came up with was:
               n & = \rm{length}(typo)
   \end{align*}
   \]
-  \footnotetext{Note that foo is the string concatenation operator here}
+  \footnotetext{Note that || is the string concatenation operator here}
 #+END_EXPORT
 
 This ended up being extremely inefficient in practice: the transposition operator doesn't allow us to
@@ -179,6 +179,12 @@ cases regardless of if that case will be used to compute the final result. The
 memoized algorithm, on the other hand, will only used enough space to store the
 results of the cases used.
 * Describe one advantage and disadvantage of the iterative algorithm
+One advantage is improved performance: there is no overhead on the runtime stack
+due to recursion. A disadvantage in general is that it is more complex to
+determine the correct order to iterate over the array. However, since this
+algorithm has a very simple pattern of dependencies, choosing the right order to
+solve the sub-problems is also very simple. In this case the call to $(i, j)$
+depends on $(i-1, j)$, $(i, j-1)$, and $(i-1, j-1)$.
 
 
 #  LocalWords:  memoized
