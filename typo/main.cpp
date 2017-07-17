@@ -15,7 +15,10 @@ auto main(const int argc, const char **argv) -> int {
     for (const auto &pair : input) {
       const auto correct = pair.first;
       const auto actual = pair.second;
-      std::cout << "\n---\nRunning typo pair - cost: ";
+#ifndef NDEBUG
+      std::cout << "\n---\n";
+#endif
+      std::cout << "Running typo pair - cost: ";
       const auto result = find_typos(correct, actual);
       std::cout << result.first << std::endl;
 
@@ -27,7 +30,9 @@ auto main(const int argc, const char **argv) -> int {
       }
 #endif
     }
+#ifndef NDEBUG
     std::cout << std::endl;
+#endif
 
     std::cout << "Writing data to " + output_filename + "...\n";
     if (!output_to_file(output_filename, data)) {
