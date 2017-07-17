@@ -81,7 +81,7 @@ transpositions.
 \SetStartEndCondition{ }{}{}%
 \begin{algorithm}[H]
 \KwIn{data: Table containing the memoized data}
-\KwIn{transposes: Set of possible transpositions}
+\KwIn{transposes: Table to store set of possible transpositions}
 \KwIn{correct: The correct string}
 \KwIn{actual: The actual string with typos} 
 \KwIn{i: Current position into the correct string}
@@ -255,20 +255,14 @@ So, as a whole, the algorithm takes O(n * m) time complexity.
 \SetKw{KwSubstitute}{Substitute}
 \SetKw{KwTranspose}{Transpose}
 \KwIn{data: Table containing the memoized data}
-\KwIn{transposes: Set of possible transpositions}
+\KwIn{transposes: Table to store set of possible transpositions}
 \KwIn{correct: The correct string}
 \KwIn{actual: The actual string with typos}
 \KwOut{Running cost of typos}
 
-\Fn{\findtransp()}{
-  \For{i \KwFrom 1 \KwTo \len{\correct}}{
-    \For{j \KwFrom 1 \KwTo \len{\actual}}{
-
-    }
-  }
-}
-
-\Fn{\findtypos{\correct, \actual}}{
+\Func{\findtypos{\correct, \actual}}{
+  $\findtransp(correct, actual, transposes)$
+  \tcc*[h]{See question 6}\\
   Let \data be a new typo array with dimensions (\len{\correct}, \len{\actual})\\
   \For{i \KwFrom 1 \KwTo \len{\correct}}{
     \For{j \KwFrom 1 \KwTo \len{\actual}}{
