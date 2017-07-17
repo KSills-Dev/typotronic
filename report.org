@@ -101,7 +101,7 @@ transpositions.
   Let $p$ be $(i,j)$\\
   \Until{$p==(-1,-1)$}{
     Record the error made at $data[p]$\\
-    $p$ = $data[p]$\\
+    $p$ = $data[p]$'s parent\\
   }
   \return the recorded errors\\
   
