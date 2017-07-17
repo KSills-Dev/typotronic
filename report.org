@@ -2,7 +2,7 @@
 #+TITLE:Project 2 Report
 #+AUTHOR:Kenneth Sills, Kevin Orr, Elijah Malaby
 #+LaTeX_HEADER: \usepackage[margin=0.5in]{geometry}
-#+LaTeX_HEADER: \usepackage[boxed]{algorithm2e}
+#+LaTeX_HEADER: \usepackage[boxed,linesnumbered]{algorithm2e}
 #+LaTeX_HEADER: \usepackage{mathtools}
 #+LaTeX_HEADER: \usepackage{amsmath}
 #+LaTeX_HEADER: \usepackage{hyperref}
@@ -47,16 +47,17 @@ The naive recurrence we came up with was:
   \footnotetext{Note that || is the string concatenation operator here}
 #+END_EXPORT
 
-This ended up being extremely inefficient in practice: the transposition operator doesn't allow us to
-memoize the main function using simply a 2d array, since transposing affects the typo string when
-recursing. We can't simply assume that the typo string and pattern strings are simply truncated between
-calls.
+
+This ended up being extremely inefficient in practice: the transposition
+operator doesn't allow us to memoize the main function using simply a 2d array,
+since transposing affects the typo string when recursing. We can't simply assume
+that the typo string and pattern strings are simply truncated between calls.
 
 * What are the base cases
-Whenever $i$ or $j$ are equal to 1. If $i = 1$, the remaining characters in $t[1..j-1]$
-were trivially all insertions at the beginning. If $j = 1$, the remaining characters
-in $p[1..i-1]$ were deleted. If both $i = 1$ and $j = 1$, there are no further characters
-to compare.
+Whenever $i$ or $j$ are equal to 1. If $i = 1$, the remaining characters in
+$t[1..j-1]$ were trivially all insertions at the beginning. If $j = 1$, the
+remaining characters in $p[1..i-1]$ were deleted. If both $i = 1$ and $j = 1$,
+there are no further characters to compare.
 * What data structure would you use
 A map from pairs of $(i, j)$ to the cost of the recurrence for $(i, j)$, as well
 as a map from pairs of $(i, j)$ to a set of numbers of transpositions $k$ such
@@ -74,29 +75,11 @@ transpositions, the contents of which is the cost to perform that chain of
 transpositions.
 
 * Pseudocode for a memoized dynamic programming solution
+  
 #+begin_export latex
-\begin{algorithm}[H]
-\LinesNumbered
-\SetKwProg{Func}{Algorithm}{\string:}{end}
-\SetKwFunction{fill}{Fill}
-\SetKwFunction{findtransp}{find\_transposes}
-\SetKwFunction{insertcost}{insert\_cost}
-\SetKwFunction{deletecost}{delete\_cost}
-\SetKwFunction{substitutecost}{substitute\_cost}
-\SetKwFunction{len}{length}
-\SetKw{return}{return}
-\SetKw{KwFrom}{from}
+\AlgoDontDisplayBlockMarkers\SetAlgoNoEnd\SetAlgoNoLine%
 \SetStartEndCondition{ }{}{}%
-\SetKwProg{Fn}{def}{\string:}{}
-\SetKwFunction{Range}{range}%%
-\SetKw{KwTo}{in}\SetKwFor{For}{for}{\string:}{}%
-\SetKw{KwInsert}{Insert}
-\SetKw{KwDelete}{Delete}
-\SetKw{KwNone}{None}
-\SetKw{KwSubstitute}{Substitute}
-\SetKw{KwTranspose}{Transpose}
-\SetKwIF{If}{ElseIf}{Else}{if}{:}{elif}{else:}{}%
-\SetKwFor{While}{while}{:}{fintq}%
+\begin{algorithm}[H]
 \KwIn{data: Table containing the memoized data}
 \KwIn{transposes: Set of possible transpositions}
 \KwIn{correct: The correct string}
@@ -104,14 +87,79 @@ transpositions.
 \KwIn{i: Current position into the correct string}
 \KwIn{j: Current position into the actual string}
 \KwOut{Running cost of typos}
+\SetKwProg{Func}{Algorithm}{\string:}{end}
+\SetKwFunction{fill}{Fill}
+\SetKwFunction{findtransp}{find\_transposes}
+\SetKwFunction{main}{Main}
+\SetKw{return}{return}
+\SetKwFor{While}{while}{:}{fintq}%
+\SetKwFor{Until}{until}{:}{fintq}%
+\Func{\main()}{
+  Fill the parents of data with $(-1, -1)$\\
+  \findtransp()\\
+  \fill(i, j)\\
+  Let $p$ be $(i,j)$\\
+  \Until{$p==(-1,-1)$}{
+    Record the error made at $data[p]$\\
+    $p$ = $data[p]$\\
+  }
+  \return the recorded errors\\
+  
+}
+\end{algorithm}
+\begin{algorithm}
+\SetKwProg{Func}{Algorithm}{\string:}{end}
+\SetKwFunction{findtransp}{find\_transposes}
+\SetKwFunction{transposecost}{transpose\_cost}
+\SetKwFunction{len}{length}
+\SetKw{KwFrom}{from}
+\SetKw{KwTo}{to}
+\SetKwProg{Fn}{def}{\string:}{}
+\SetKwFor{For}{for}{\string:}{}%
+\SetKwIF{If}{ElseIf}{Else}{if}{:}{elif}{else:}{}%
 \AlgoDontDisplayBlockMarkers\SetAlgoNoEnd\SetAlgoNoLine%
 \Fn{\findtransp()}{
-  \For{i \KwFrom 1 \KwTo \len(correct)}{
-    \For{j \KwFrom 1 \KwTo \len(actual)}{
-    
+  \For{i \KwFrom \len(correct) \KwTo 2}{
+    \For{j \KwFrom \len(actual) \KwTo 2}{
+      Let $correct\_char$ be $correct[i]$\\
+      Let $current\_char$ be $actual[j]$\\
+      Let $left\_char$ be $actual[j-1]$\\
+      \If{$left\_char==correct\_char$ and $current\_char != correct\_char$}{
+        Start the running cost at $\transposecost(left\_char, current\_char)$\\
+        \For{k \KwFrom 1 \KwTo 12}{
+          Let $correct\_char$ be $correct[i-n]$\\
+          Let $left\_char$ be $actual[j-1-n]$\\
+          \If{$current\_char == correct\_char$}{
+            Add a possible transposition to $transpoes[i,j]$
+              with the current running cost\\
+          }
+          \If{$correct\_char != left\_char$}{
+            break the innermost loop\\
+          }
+          Add $\transposecost(left\_char, current\_char)$ to the running cost\\
+        }
+      }
     }
   }
 }
+\end{algorithm}
+\pagebreak
+\begin{algorithm}[H]
+\SetKwProg{Func}{Algorithm}{\string:}{end}
+\SetKwFunction{fill}{Fill}
+\SetKwFunction{insertcost}{insert\_cost}
+\SetKwFunction{deletecost}{delete\_cost}
+\SetKwFunction{substitutecost}{substitute\_cost}
+\SetKwFunction{len}{length}
+\SetKw{return}{return}
+\SetKw{KwFrom}{from}
+\SetKwProg{Fn}{def}{\string:}{}
+\SetKw{KwInsert}{Insert}
+\SetKw{KwDelete}{Delete}
+\SetKw{KwNone}{None}
+\SetKw{KwSubstitute}{Substitute}
+\SetKw{KwTranspose}{Transpose}
+\SetKwIF{If}{ElseIf}{Else}{if}{:}{elif}{else:}{}%
 \Fn{\fill{i, j}}{
   \uIf{$data[i,j]$ has a value}{
     \return the cost in $data[i,j]$\\
@@ -164,7 +212,6 @@ transpositions.
 \end{algorithm}
 #+end_export
 
-
 * Worst case time complexity
 The worst-case of our algorithm will encompass:
  - O(n * m) Transposition identification.
@@ -174,7 +221,7 @@ So, as a whole, the algorithm takes O(n * m) time complexity.
 
 * Pseudocode for nested loop
 * Can the space complexity of the iterative algorithm be improved relative to the memoized algorithm
-No, because the iterative algorithm has to build up every case from the base
+  No, because the iterative algorithm has to build up every case from the base
 cases regardless of if that case will be used to compute the final result. The
 memoized algorithm, on the other hand, will only used enough space to store the
 results of the cases used.
@@ -187,4 +234,4 @@ solve the sub-problems is also very simple. In this case the call to $(i, j)$
 depends on $(i-1, j)$, $(i, j-1)$, and $(i-1, j-1)$.
 
 
-#  LocalWords:  memoized
+#  LocalWords:  memoized memoize
