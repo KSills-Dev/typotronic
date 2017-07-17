@@ -206,7 +206,7 @@ transpositions.
     }
     Pick the minimum option in $options$\\
     Store the cost, error type, and parent in in $data[i,j]$\\
-    \return the cost\\
+    \return that minimum cost\\
   }
 }
 \end{algorithm}
