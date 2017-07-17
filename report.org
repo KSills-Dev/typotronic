@@ -90,14 +90,14 @@ transpositions.
 \SetKwProg{Func}{Algorithm}{\string:}{end}
 \SetKwFunction{fill}{Fill}
 \SetKwFunction{findtransp}{find\_transposes}
-\SetKwFunction{main}{Main}
+\SetKwFunction{main}{FindTypos}
 \SetKw{return}{return}
 \SetKwFor{While}{while}{:}{fintq}%
 \SetKwFor{Until}{until}{:}{fintq}%
-\Func{\main()}{
+\Func{\main}{
   Fill the parents of data with $(-1, -1)$\\
-  \findtransp()\\
-  \fill(i, j)\\
+  \findtransp(correct, actual, transposes)\\
+  \fill(corect, actual, data, transposes i, j)\\
   Let $p$ be $(i,j)$\\
   \Until{$p==(-1,-1)$}{
     Record the error made at $data[p]$\\
@@ -107,6 +107,7 @@ transpositions.
   
 }
 \end{algorithm}
+\pagebreak[0]
 \begin{algorithm}
 \SetKwProg{Func}{Algorithm}{\string:}{end}
 \SetKwFunction{findtransp}{find\_transposes}
@@ -117,10 +118,9 @@ transpositions.
 \SetKwProg{Fn}{def}{\string:}{}
 \SetKwFor{For}{for}{\string:}{}%
 \SetKwIF{If}{ElseIf}{Else}{if}{:}{elif}{else:}{}%
-\AlgoDontDisplayBlockMarkers\SetAlgoNoEnd\SetAlgoNoLine%
-\Fn{\findtransp()}{
-  \For{i \KwFrom \len(correct) \KwTo 2}{
-    \For{j \KwFrom \len(actual) \KwTo 2}{
+\Fn{\findtransp(correct, actual, transposes)}{
+  \For{i \KwFrom \len(correct) \KwTo 1}{
+    \For{j \KwFrom \len(actual) \KwTo 1}{
       Let $correct\_char$ be $correct[i]$\\
       Let $current\_char$ be $actual[j]$\\
       Let $left\_char$ be $actual[j-1]$\\
@@ -133,7 +133,7 @@ transpositions.
             Add a possible transposition to $transpoes[i,j]$
               with the current running cost\\
           }
-          \If{$correct\_char != left\_char$}{
+          \If{$correct\_char != left\_char$ or $i-n==1$ or $j-1-n==1$}{
             break the innermost loop\\
           }
           Add $\transposecost(left\_char, current\_char)$ to the running cost\\
@@ -143,7 +143,7 @@ transpositions.
   }
 }
 \end{algorithm}
-\pagebreak
+\pagebreak[0]
 \begin{algorithm}[H]
 \SetKwProg{Func}{Algorithm}{\string:}{end}
 \SetKwFunction{fill}{Fill}
@@ -160,48 +160,52 @@ transpositions.
 \SetKw{KwSubstitute}{Substitute}
 \SetKw{KwTranspose}{Transpose}
 \SetKwIF{If}{ElseIf}{Else}{if}{:}{elif}{else:}{}%
-\Fn{\fill{i, j}}{
+\Fn{\fill{correct, actual, data, transposes i, j}}{
   \uIf{$data[i,j]$ has a value}{
-    \return the cost in $data[i,j]$\\
+    \return
   }
   \uElseIf{$i==1$ and $j==1$} {
     \return $0$
   }
   \uElseIf{$i==1$} {
-    Let the cost be $\insertcost(i,j) + \fill(i, j-1)$\\
+    $\fill(correct, actual, data, transposes, i, j-1)$\\
+    Let the cost be $\insertcost(i,j) + data[i, j-1]$\\
     Store the cost in $data[i,j]$\\
     Set the typo of $data[i,j]$ to \KwInsert\\
     Set the parent of $data[i,j]$ to $(i, j-1)$\\
     \return the cost\\
   }
   \uElseIf{$j==1$}{
-    Let the cost be $\deletecost(i,j) + \fill(i-1, j)$\\
+    $\fill(correct, actual, data, transposes, i-1, j)$\\
+    Let the cost be $\deletecost(i,j) + data[i-1, j]$\\
     Store the cost in $data[i,j]$\\
     Set the typo of $data[i,j]$ to \KwDelete\\
     Set the parent of $data[i,j]$ to $(i-1, j)$\\
     \return the cost\\
   }
   \Else{
+    $\fill(correct, actual, data, transposes, i, j-1)$\\
+    $\fill(correct, actual, data, transposes, i-1, j)$\\
+    $\fill(correct, actual, data, transposes, i-1, j-1)$\\
     Let $options$ be a list of possible errors.\\
     Add an \KwInsert error to $options$ with cost
-      $\insertcost(i,j) + \fill(i, j-1)$ and parent
-      $(i, j-1)$\\
+      $\insertcost(i,j) + data[i, j-1]$ and parent $(i, j-1)$\\
     Add a \KwDelete error to $options$ with cost
-      $\deletecost(i,j) + \fill(i-1, j)$ and parent
-      $(i-1, j)$\\
+      $\deletecost(i,j) + data[i-1, j]$ and parent $(i-1, j)$\\
     \uIf{$correct[i]==actual[j]$}{
-      Add a \KwNone error with cost $\fill(i-1, j-1)$ and parent $(i-1,j-1)$\\
+      Add a \KwNone error with cost $data[i-1, j-1]$ and parent $(i-1,j-1)$\\
     }
     \Else{
       Add a \KwSubstitute error to $options$ with cost
-        $\substitutecost(i,j) + \fill(i-1, j-1)$ and parent
-        $(i-1, j-1)$\\
+        $\substitutecost(i,j) + data[i-1, j-1]$
+        and parent $(i-1, j-1)$\\
     }
     \uIf{There are transpositions in $transpoes[i,j]$}{
       \For{$t$ in $transpoes[i,j]$}{
+        $\fill(correct, actual, data, transposes, i-t.length, j-t.length)$\\
         Add a \KwTranspose error with cost
-          $t.cost + \fill(i-t.length, j-t.length)$ and parent
-          $(i-t.length, j-t.length)$\\
+          $t.cost + data[i-t.length, j-t.length]$
+          and parent $(i-t.length, j-t.length)$\\
       }
     }
     Pick the minimum option in $options$\\
